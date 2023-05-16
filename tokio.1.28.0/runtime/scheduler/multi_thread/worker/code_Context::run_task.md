@@ -14,6 +14,11 @@ Context::run_task
                     Some(task) => task,
                     None => return Ok(core),
                 };
+------if coop::has_budget_remaining() {
+--------core.metrics.incr_poll_count();
+--------*self.core.borrow_mut() = Some(core);
+--------let task = self.worker.handle.shared.owned.assert_owner(task);
+--------task.run();
 ```
 
 #2.caller

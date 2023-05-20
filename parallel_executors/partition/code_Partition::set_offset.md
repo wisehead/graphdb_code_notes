@@ -7,3 +7,9 @@ Partition::set_offset
             .and_modify(|e| *e = offset.clone())
             .or_insert(offset);
 ```
+
+#2.caller
+
+```
+handle_query_result
+```

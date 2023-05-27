@@ -24,3 +24,7 @@ pub struct Ready {
     must_sync: bool,
 }
 ```
+
+#2.details
+
+![](./images/Ready.png)

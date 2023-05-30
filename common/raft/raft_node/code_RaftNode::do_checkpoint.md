@@ -11,6 +11,10 @@ RaftNode::do_checkpoint
 #2.caller
 
 ```
-- RaftNode::run
+async_main
+--init_raft/handle_graph_action
+----init_graph_partition_raft
+------Raft::lead
+--------RaftNode::run
 
 ```

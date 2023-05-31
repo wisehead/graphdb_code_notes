@@ -11,6 +11,7 @@ init_graph_partition_raft
 ----RaftLog::get
 ------RaftLog::new
 --let mailbox_map = MailboxMap::get();
+--let partition_peers = meta.get_graph_raft_info(graph_id);
 ```
 
 #2.caller

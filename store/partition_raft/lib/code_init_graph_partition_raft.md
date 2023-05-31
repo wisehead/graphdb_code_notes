@@ -41,6 +41,37 @@ init_graph_partition_raft
           cluster,
           true,
       );
+------mailbox_map
+                .inner
+                .write()
+                .await
+                .entry(cluster)
+                .or_insert_with(HashMap::new);
+
+------mailbox_map
+                .inner
+                .write()
+                .await
+                .get_mut(&cluster)
+                .unwrap()
+                .insert(*peer_id as u64, Arc::new(raft.mailbox()));
+------if current_leader_id == *peer_id {
+--------tokio::spawn(raft.lead(*peer_id as u64, cluster));
+------else
+--------if let Some(leader_node) = peer_node_map.get(&(current_leader_id as u64)){
+                    leader_addr = format!("{}:{}", leader_node.ip, partition_raft_port);
+--------}else if let Some(peer) = meta.fetch_peer_status(graph_id, *partition_id, current_leader_id as u64).await{
+                    let node = meta.get_node_by_id(peer.node_id).unwrap();
+                    leader_addr = format!("{}:{}", node.ip, partition_raft_port);
+--------}
+--------tokio::spawn(raft.join(
+                    *peer_id as u64,
+                    Some(current_leader_id as u64),
+                    leader_addr,
+                    cluster,
+                    false,
+                ));
+                
 ```
 
 #2.caller

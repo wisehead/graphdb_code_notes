@@ -20,4 +20,6 @@ RaftNode::process_recovery
                     .unwrap()
 ------SledStorage::entries
 --------SledStorage::get_entries
+--PartitionRaftExecutor::instance().spawn(async move {
+                let _ = recovery(graph_id, partition_id, logs, true).await;
 ```

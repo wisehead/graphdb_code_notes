@@ -44,5 +44,18 @@ recovery
 --------commit_logs.push(log_entry.clone());  
 --// 3. Sort index to bring back the index with previous order  and then replay these logs
 --commit_logs.sort_by(|a, b| a.lsn.cmp(&b.lsn));
---              
+--let mut kv_map: HashMap<Key, Value> = HashMap::new();
+--let mut update_vertex_map: HashMap<Key, Vec<data_type::Value>> = HashMap::new();
+--let mut update_edge_map: HashMap<Key, Vec<data_type::Value>> = HashMap::new();
+--let mut delete_keys: Vec<Key> = Vec::new();
+
+--let mut insert_edge_keys: Vec<EdgeKey> = vec![];
+--let mut delete_edge_keys: Vec<EdgeKey> = vec![];              
+--for log_entry in commit_logs.iter() {
+----match log_entry.action_type {
+------ActionTypeLog::InsertVertex => {
+--------if let Some(log_data) = &log_entry.action_log {
+----------if let GraphObjectKey::Vertex(key) = &log_data.key {
+------------if let GraphObjectProperty::Insert(values) = &log_data.property {
+
 ```

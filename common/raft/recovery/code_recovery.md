@@ -57,5 +57,23 @@ recovery
 --------if let Some(log_data) = &log_entry.action_log {
 ----------if let GraphObjectKey::Vertex(key) = &log_data.key {
 ------------if let GraphObjectProperty::Insert(values) = &log_data.property {
+------------// Encode value
+------------let schema = meta_client
+               .get_vertex_schema_by_id(graph_id, key.type_id)
+               .unwrap();
+------------let encode_value = encode_value(
+--------------log_data.schema_version,
+--------------values,
+--------------&schema.generate_null_index_map(),
+------------kv_map.insert(key.encode(), encode_value);
+------------let mut m = HashMap::new();
+------------for (idx, value) in values.iter().enumerate() {
+--------------let field_id = schema.fields[idx].id;
+--------------m.insert(field_id, value.clone());
+------------// index
+------------let index_keys = generate_vertex_index_key(graph_id, key, &m, None);
+------------for index_key in index_keys.into_iter() {
+--------------kv_map.insert(index_key, EMPTY_VALUE.into());
+
 
 ```

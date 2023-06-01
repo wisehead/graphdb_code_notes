@@ -145,4 +145,37 @@ recovery
                                     &schema.generate_null_index_map(),
                                 );
 ----------kv_map.insert(encode_key, encode_value);
+
+------ActionTypeLog::DeleteVertex => {
+--------let encode_key = encode_vertex_key(graph_id, key);
+--------kv_map.remove(&encode_key);
+--------delete_keys.push(encode_key);
+
+--------let schema = meta_client
+                            .get_vertex_schema_by_id(graph_id, key.type_id)
+                            .unwrap();
+--------let encode_key = key.encode();
+
+--------// fetch value from tikv
+--------let mut m = HashMap::new();
+--------if let Some(current_data) = kv_client.get(encode_key.clone()).await.unwrap()
+--------{
+                            let decode_result = decode_properties(
+                                &current_data[..],
+                                &schema,
+                                &schema.field_names[..],
+                            );
+                            if decode_result.is_ok() {
+                                for (idx, value) in decode_result.unwrap().iter().enumerate() {
+                                    let field_id = schema.fields[idx].id;
+                                    m.insert(field_id, value.clone());
+                                }
+                            }
+--------}
+
+--------// remove index
+--------let index_keys = generate_vertex_index_key(graph_id, key, &m, None);
+--------for index_key in index_keys.into_iter() {
+----------delete_keys.push(index_key)
+--------}
 ```

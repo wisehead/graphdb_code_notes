@@ -178,4 +178,28 @@ recovery
 --------for index_key in index_keys.into_iter() {
 ----------delete_keys.push(index_key)
 --------}
+
+--// 4. Flush into kv engine
+--let kv_pairs: Vec<KvPair> = kv_map.into_iter().collect();
+--kv_client.batch_put(kv_pairs).await.unwrap();
+--kv_client.batch_delete(delete_keys).await.unwrap();
+
+--// 6. Flush into mem engine
+--if memory_engine::MemoryEngine::is_global_topology_cache_enabled() {
+--memory_engine::MemoryEngine::batch_load_edges(graph_id, insert_edge_keys, false, false)?;
+--memory_engine::MemoryEngine::batch_remove_edges(graph_id, delete_edge_keys)?;
+
+--// 5. Notify meta these txns are commited, we can safely GC these txns.
+--commit_txns.extend(
+        txn_set
+            .iter()
+            .map(|item| (*item).into())
+            .collect::<Vec<TransactionTs>>(),
+    );
+--if !commit_txns.is_empty() {
+        meta_client
+            .unregister_transaction_ts(commit_txns)
+            .await
+            .unwrap();
+    }
 ```

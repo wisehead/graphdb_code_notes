@@ -15,4 +15,15 @@ LogBuffer::append_log
 ----self.notify.notify_waiters();
 ----if commit_flag || self.is_full(current_lsn) {
 ------let logs = self.collect_log(current_lsn).await;
+------if !logs.is_empty() {
+--------let graph_id = self.graph_id;
+--------let partition_id = self.partition_id;
+--------if matches!(Config::get_dml_log_policy(), LogPolicy::Performance) {
+----------StorageExecutor::instance().spawn(Self::commit_log(
+                        graph_id,
+                        partition_id,
+                        logs,
+                    ));
+--------} else {
+----------return Self::commit_log(graph_id, partition_id, logs).await;
 ```

@@ -2,6 +2,7 @@
 
 ```
 Executor::execute_plan
+--let cache = SessionManager::get_instance().get_local_query_cache();
 --
 
 ```

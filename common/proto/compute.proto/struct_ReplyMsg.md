@@ -11,3 +11,14 @@ pub struct ReplyMsg {
     pub msg: ::prost::alloc::string::String,
 }
 ```
+
+```
+message ReplyMsg {
+  enum Status {
+    kOK  = 0;
+    kErr = 1;
+  }
+  Status      status  = 1;
+  string      msg     = 2; 
+}
+```

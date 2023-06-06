@@ -24,4 +24,5 @@ Executor::run_ddl
 ----Plan::StandaloneCall(call) => DDLOperator::new_with_standalone_call(call, &stmt_ctx)?,
 ----_ => panic!(),
 --let mut result = op.process().await?;
+----各个Operator::process
 ```

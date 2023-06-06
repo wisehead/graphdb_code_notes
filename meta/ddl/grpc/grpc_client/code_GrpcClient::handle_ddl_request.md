@@ -13,6 +13,8 @@ GrpcClient::handle_ddl_request
                 );
 ------let mut client = GrpcCommon::build_ddl_grpc_client(&host_name).await?;
 ------client.handle_ddl_request(tonic_request).await      
+--------ddl_service_client::DdlServiceClient::handle_ddl_request
+----------self.inner.unary(request.into_request(), path, codec).await//grpc内部机制
 ----count -= 1;
 ----if response.is_err() && count > 0 {
 ------GrpcChannel::instance().delete_channel(&host_name).await;

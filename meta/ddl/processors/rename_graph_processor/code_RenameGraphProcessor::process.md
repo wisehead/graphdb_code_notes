@@ -10,5 +10,7 @@ RenameGraphProcessor::process
         };
 --let request = self.create_request(DdlStep::KStepPrepare, &new_stmt_ctx)?;
 --self.handle_request(request, &new_stmt_ctx).await?;
+----self.handle_request_with_item(request, stmt_ctx, graph_item)
+            .await
 --self.build_response_msg(false)        
 ```

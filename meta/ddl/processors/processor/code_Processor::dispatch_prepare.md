@@ -14,4 +14,24 @@ Processor::dispatch_prepare
                 .collect(),
         )
         .await;
+--let mut host_set = HashSet::from([local_host_name]);
+--for (key, value) in success {
+            match get_node_info(&key, value) {
+                Ok(address) => {
+                    host_set.insert(address);
+                }
+                Err(err) => {
+                    failure.insert(key, err);
+                }
+            }
+        }       
+--if failure.is_empty() {
+----return Ok(()); 
+
+  //rollback
+--let rollback_request = DdlActionRequest {
+            step: DdlStep::KStepRollback as i32,
+            ..request.clone()
+        };
+--let _ = self.dispatch_post(host_set, rollback_request).await;        
 ```

@@ -7,4 +7,11 @@ RaftNode::on_ready
     // Send out the messages.
 ----let messages = ready.take_messages();
 ----self.send_messages(messages);
+
+--if *ready.snapshot() != Snapshot::default() {
+----let snapshot = ready.snapshot();
+----self.store.restore(snapshot.get_data()).await?;
+----let store = self.mut_store();
+----store.apply_snapshot(snapshot.clone())?;
+--}
 ```

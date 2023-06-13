@@ -18,11 +18,20 @@ RaftNode::run
 ----self.do_checkpoint().await;
 ----let receive_result = timeout(heartbeat, self.rcv.next()).await;
 ----match receive_result {
+------Ok(Some(Message::Propose { proposal, chan })) => {
+--------if !self.is_leader() {
+----------self.send_wrong_leader(chan);
+--------} else {
+----------let log: Vec<data_type::LogEntry> = deserialize(&proposal).unwrap();
+----------merger.add(proposal, chan);
+----------self.take_and_propose(&mut merger);
+
 ------Ok(Some(Message::RequestId { chan })) => {
 --------if !self.is_leader() {
 ----------self.send_wrong_leader(chan);
 --------} else {
 ----------self.send_leader_id(chan);
+------------chan.send(RaftResponse::RequestId {leader_id: self.leader(),}
 --------}
 ------}
 ```

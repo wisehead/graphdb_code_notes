@@ -34,4 +34,9 @@ RaftNode::run
 ------------chan.send(RaftResponse::RequestId {leader_id: self.leader(),}
 --------}
 ------}
+----let on_ready_now = Instant::now();
+----self.on_ready().await 
+    // Do checkpoint
+----self.do_checkpoint(false).await;
+--loop
 ```

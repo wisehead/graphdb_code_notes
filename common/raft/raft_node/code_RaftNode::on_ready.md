@@ -14,4 +14,7 @@ RaftNode::on_ready
 ----let store = self.mut_store();
 ----store.apply_snapshot(snapshot.clone())?;
 --}
+
+--self.handle_committed_entries(ready.take_committed_entries())
+            .await?;
 ```

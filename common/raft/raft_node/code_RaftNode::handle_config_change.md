@@ -28,5 +28,21 @@ RaftNode::handle_config_change
 ----let snapshot = prost::bytes::Bytes::from(self.store.snapshot().await.unwrap());
 ------let store = self.mut_store();
 ------store.set_conf_state(&cs).unwrap();
-------store.create_snapshot(snapshot).unwrap();          
+------store.create_snapshot(snapshot).unwrap();      
+
+--if let Some(sender) = self.uncommitteds.remove(&seq) {
+----let response = match change_type {
+------ConfChangeType::AddNode | ConfChangeType::AddLearnerNode => {
+                    RaftResponse::JoinSuccess {
+                        assigned_id: id,
+                        peer_addrs: self.peer_addrs(),
+                    }
+                }
+------ConfChangeType::RemoveNode => RaftResponse::Ok,
+----if let ReplyChan::One((sender, _)) = sender {
+------if sender.send(response).is_err() {
+                    arcgraph_log::raft_debug!("error sending response")
+                }
+            }
+--}    
 ```

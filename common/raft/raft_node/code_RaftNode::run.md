@@ -16,5 +16,13 @@ RaftNode::run
 ------Timeout::poll
 --------had_budget_before = coop::has_budget_remaining();
 ----self.do_checkpoint().await;
---
+----let receive_result = timeout(heartbeat, self.rcv.next()).await;
+----match receive_result {
+------Ok(Some(Message::RequestId { chan })) => {
+--------if !self.is_leader() {
+----------self.send_wrong_leader(chan);
+--------} else {
+----------self.send_leader_id(chan);
+--------}
+------}
 ```

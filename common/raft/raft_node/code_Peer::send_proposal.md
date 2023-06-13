@@ -22,9 +22,9 @@ Peer::send_proposal
 Peer::_send_proposal
 --let c = self.connect().await?;
 --async fn task(mut c: RaftGrpcClient, msg: RraftProposal) -> Result<Vec<u8>> {
-            let message_request = Request::new(msg);
-            let response = c.send_proposal(message_request).await?;
-            let message_reply = response.into_inner();
-            Ok(message_reply.inner)
-        }
+----let message_request = Request::new(msg);
+----let response = c.send_proposal(message_request).await?;
+------RaftServiceClient::send_proposal//发到RaftServiceServer:: send_proposal
+----let message_reply = response.into_inner();
+----Ok(message_reply.inner)
 ```

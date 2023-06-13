@@ -15,4 +15,5 @@ PartitionRaft::batch_append_logs
                         .send(message)
                         .await
                         .map_err(|e| ErrorCode::RaftCommonError(e.to_string()))?;
+----------MailBox::send
 ```

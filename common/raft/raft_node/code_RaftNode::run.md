@@ -18,6 +18,29 @@ RaftNode::run
 ----self.do_checkpoint().await;
 ----let receive_result = timeout(heartbeat, self.rcv.next()).await;
 ----match receive_result {
+------Ok(Some(Message::Raft(m))) => {
+--------let msg_type = m.get_msg_type();
+--------if !snapshot_received && msg_type == MessageType::MsgHeartbeat {
+                        arcgraph_log::raft_debug!(
+                            "[raft] MsgHeartbeat message received, snapshot_received: {}, has_leader: {}, {:?}",
+                            snapshot_received,
+                            self.has_leader(),
+                            m
+                        );
+--------} else {
+----------if let Err(e) = self.step(*m) {
+                            arcgraph_log::raft_warn!(
+                                "step error, {:?}, msg_type: {:?}, snapshot_received: {}",
+                                e,
+                                msg_type,
+                                snapshot_received
+                            );
+                        }
+----------if msg_type == MessageType::MsgSnapshot {
+                            snapshot_received = true;
+--------}
+------}
+
 ------Ok(Some(Message::Propose { proposal, chan })) => {
 --------if !self.is_leader() {
 ----------self.send_wrong_leader(chan);

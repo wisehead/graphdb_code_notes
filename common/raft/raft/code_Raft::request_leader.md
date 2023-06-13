@@ -23,3 +23,10 @@ Raft::request_leader
 ------ResultCode::Ok => (deserialize(&response.data)?, peer_addr),
 ------ResultCode::Error => return Ok(None),
 ```
+
+#2.caller
+
+```
+- Raft::find_leader_info
+- Raft::join
+```

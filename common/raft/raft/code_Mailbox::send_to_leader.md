@@ -8,5 +8,5 @@
         };
 --proposal_sender.send().await
 ----ProposalSender::send
-
+------ProposalSender::send
 ```

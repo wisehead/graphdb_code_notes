@@ -17,4 +17,9 @@ RaftNode::on_ready
 
 --self.handle_committed_entries(ready.take_committed_entries())
             .await?;
+            
+--if !ready.entries().is_empty() {
+----let entries = ready.entries();
+
+            
 ```

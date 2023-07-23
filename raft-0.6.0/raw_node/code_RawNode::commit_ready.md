@@ -15,4 +15,6 @@ RawNode::commit_ready
         }
 --if let Some((index, term)) = rd_record.last_entry {
 ----raft.raft_log.stable_entries(index, term);
+------RaftLog::stable_entries
+--------Unstable::stable_entries
 ```

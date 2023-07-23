@@ -4,7 +4,8 @@
 RawNode::advance_append
 --self.commit_ready(rd);
 --self.on_persist_ready(self.max_number);
-        let mut light_rd = self.gen_light_ready();
+----
+--let mut light_rd = self.gen_light_ready();
 ```
 
 #2.notes

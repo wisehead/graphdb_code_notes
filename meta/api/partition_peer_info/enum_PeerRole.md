@@ -1,4 +1,4 @@
-#1.struct PeerRole
+#1.enum PeerRole
 
 ```rust
 pub enum PeerRole {

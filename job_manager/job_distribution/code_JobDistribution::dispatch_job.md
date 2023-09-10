@@ -8,5 +8,14 @@ JobDistribution::dispatch_job
             action: action as i32,
             job_spec: serde_json::to_vec(&raw_spec)?,
         };
---
+--let mut join_set = JoinSet::new();
+--let mut join_set = JoinSet::new();
+--for host in host_list.iter() {
+----join_set.spawn_on(
+------Self::dispatch_job_to_host(msg.clone(), host.clone(), job_info.clone()),
+------BackgroundExecutor::instance().handle(),
+            );
+--}
+--let count = util::build_result_from_joinset(&mut join_set).await?;
+
 ```

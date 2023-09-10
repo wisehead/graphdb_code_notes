@@ -32,8 +32,7 @@ GrpcServer::update_job_status
                         task_info!("notify each worker to kill job task {}", msg.job_id);
                         job_manager.kill_job(msg.job_id as JobId);
 ----}
-----job_manager
-                        .update_job_status(msg.job_id as JobId, msg.host.clone(), job_status)
+----job_manager.update_job_status(msg.job_id as JobId, msg.host.clone(), job_status)
                         .await?;
 --}
 --Ok(tonic::Response::new(DdlReplyMsg {

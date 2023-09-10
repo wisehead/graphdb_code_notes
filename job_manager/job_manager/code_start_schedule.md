@@ -16,6 +16,6 @@ JobManager::schedule
 ------count += jobs.len();
 ------for job in jobs.iter() {
 --------BackgroundExecutor::instance().spawn(Self::run_job(job.clone()));
-----notify.notified().await;
+----notify.notified().await;//condvar wait
 --}//loop end
 ```

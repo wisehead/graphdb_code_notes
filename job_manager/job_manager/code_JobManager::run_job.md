@@ -14,16 +14,15 @@ JobManager::run_job
 --// run job
 --let status_map = {
 ----if job_data.is_distribute() {
-                // Distribute mode
-                job_data.init_status(job_data.get_partition_leaders(), JobStatus::Run);
-                let result = JobDistribution::dispatch_job(job_data.clone(), JobAction::Run).await;
-                if result.is_err() {
+      // Distribute mode
+------job_data.init_status(job_data.get_partition_leaders(), JobStatus::Run);
+------let result = JobDistribution::dispatch_job(job_data.clone(), JobAction::Run).await;
+------if result.is_err() {
                     let job_group = job_data.get_job_group();
                     let manager = JobManager::instance();
                     let mut queue = manager.queues[job_group as usize].write();
                     queue.add_job(job_id, true);
                     return;
-                }
 ----} else {
       // Standalone mode
 ------let job_task = JobTask {
@@ -32,8 +31,7 @@ JobManager::run_job
 ------};
 ------job_data.init_status(
                     vec![MetaClient::get().get_node_address().to_string()],
-                    JobStatus::Run,
-------);
+                    JobStatus::Run,);
 ------job_task.run(Some(JobManager::mark_standalone_job_error));
 ----}
 

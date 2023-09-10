@@ -28,12 +28,11 @@ GrpcServer::update_job_status
 --let job_status: JobStatus = msg.job_status.into();
 --if !matches!(job_status, JobStatus::New) {
 ----if matches!(job_status, JobStatus::Exit) {
-                        // notify each work to kill the running job task
-                        task_info!("notify each worker to kill job task {}", msg.job_id);
-                        job_manager.kill_job(msg.job_id as JobId);
+      // notify each work to kill the running job task
+------task_info!("notify each worker to kill job task {}", msg.job_id);
+------job_manager.kill_job(msg.job_id as JobId);
 ----}
-----job_manager.update_job_status(msg.job_id as JobId, msg.host.clone(), job_status)
-                        .await?;
+----job_manager.update_job_status(msg.job_id as JobId, msg.host.clone(), job_status).await?;
 --}
 --Ok(tonic::Response::new(DdlReplyMsg {
                     msg: Some(proto::compute::ReplyMsg {

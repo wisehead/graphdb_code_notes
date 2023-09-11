@@ -24,3 +24,13 @@ JobManager::recover_jobs
 --}
 --self.notify();
 ```
+
+#2.JobQueue::recover_jobs
+
+```
+pub(crate) fn recover_jobs(&mut self, job_id: Vec<JobId>) {
+        for id in job_id {
+            self.pending_jobs.push_back(id);
+        }
+    }
+```

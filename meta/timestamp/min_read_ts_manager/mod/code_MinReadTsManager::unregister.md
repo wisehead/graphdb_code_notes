@@ -20,4 +20,11 @@ MinReadTsManager::unregister
 ------TransactionTs::from(last_ts.get_num() + 1)
 ----}
 --};
+--self.persist(&min_read_ts).await.with_context(|| {
+            // rollback mem updates
+            batch.iter().for_each(|ts| {
+                self.active_ts.insert(ts.clone());
+            });
+            ErrorCode::UpdateMinReadTsError("Fail to persist min read ts.".to_string())
+--})?;
 ```

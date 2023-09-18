@@ -9,4 +9,7 @@ ArcGraphServer::register_node
 ----MetaManager::get().register_node(cluster_id, node).await?
 --} else {
 ----RegisterNodeRequest::dispatch(()).await?
+--meta_api::MetaHelper::initialize(cluster_info_msg)?;
+--if !standalone_mode {
+----tokio::spawn(Self::sync_heartbeat());
 ```

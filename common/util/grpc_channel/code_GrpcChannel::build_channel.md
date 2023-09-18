@@ -1,4 +1,4 @@
-#1.GrpcChannel::build_channel
+## #1.GrpcChannel::build_channel
 
 ```
 GrpcChannel::build_channel

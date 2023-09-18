@@ -10,4 +10,14 @@ GrpcClient::handle_store_request_multiple_host
                     .spawn(Self::handle_store_request(value, key).in_current_span()),
             );
 --}
+--for (key, value) in tasks {
+            let (task_result,) = tokio::join!(value);
+            match task_result {
+                Ok(result) => match result {
+                    Ok(t) => _ = success.insert(key, t),
+                    Err(code) => _ = failure.insert(key, code),
+                },
+                Err(err) => _ = failure.insert(key, ErrorCode::from(err)),
+            }
+        }
 ```

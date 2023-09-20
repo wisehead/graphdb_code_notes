@@ -26,5 +26,8 @@ CreateGraphProcessor::process
             .await?;
 ----prepare
 --self.handle_request(request, stmt_ctx).await?;
+----let graph_item = self.get_graph_item();
+----self.handle_request_with_item(request, stmt_ctx, graph_item)
+            .await
 --self.build_response_msg(false)
 ```

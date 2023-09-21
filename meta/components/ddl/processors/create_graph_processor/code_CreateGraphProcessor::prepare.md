@@ -5,7 +5,7 @@ CreateGraphProcessor::prepare
 --let graph = self.build_graph()?;
 --if work_as_arc_server {
 ----let helper = MetaHelper::get();
-            helper.add_graph_entry(
+----helper.add_graph_entry(
                 graph,
                 self.inner.partition_leaders.clone(),
                 self.inner.partition_peer_info.clone(),

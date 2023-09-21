@@ -2,6 +2,7 @@
 
 ```
 CreateGraphProcessor::prepare
+--let graph = self.build_graph()?;
 --if work_as_arc_server {
 ----let helper = MetaHelper::get();
             helper.add_graph_entry(

@@ -26,14 +26,7 @@ partition_log_writer
             // Nothing to do
             continue;
         }
-        let (write_start_lsn, write_end_lsn) = opt_write_interval.unwrap();
-        arcgraph_log::store_debug!(
-            "[PartitionLogManager] log writer graph {} partition {} collect log, start_lsn: {}, end_lsn: {}",
-            log_buffer.graph_id,
-            log_buffer.partition_id,
-            write_start_lsn,
-            write_end_lsn
-        );
+----let (write_start_lsn, write_end_lsn) = opt_write_interval.unwrap();
 
         // Write log to temporary Vec according to collected LSN interval
         //
@@ -41,17 +34,9 @@ partition_log_writer
         // maybe OOM risk
         //
 
-        let logs = log_buffer
+----let logs = log_buffer
             .write_log(write_start_lsn, write_end_lsn)
             .unwrap();
-        arcgraph_log::store_debug!(
-            "[PartitionLogManager] log writer graph {} partition {} write log, start_lsn: {}, end_lsn: {}",
-            log_buffer.graph_id,
-            log_buffer.partition_id,
-            write_start_lsn,
-            write_end_lsn
-        );
-
         // Flush log to RAFT
         //
         // need handle error from RAFT

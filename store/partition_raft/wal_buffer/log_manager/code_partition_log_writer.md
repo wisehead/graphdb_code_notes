@@ -42,40 +42,19 @@ partition_log_writer
         // need handle error from RAFT
         //
 
-        if let Err(error) = log_buffer.flush_log(logs).await {
-            arcgraph_log::store_error!(
-                "[PartitionLogManager] graph {} partition {} flush log get error, error code is {:?}",
-                log_buffer.graph_id,
-                log_buffer.partition_id,
-                error
-            );
+----if let Err(error) = log_buffer.flush_log(logs).await {
             // when error(leader change or disk full), we should set
             // error code to notify user task to report error
             // TODO: consider recover from error, such as disk full
-            log_buffer.set_error(error);
-            log_buffer.wakeup_user_flush();
+------log_buffer.set_error(error);
+------log_buffer.wakeup_user_flush();
 
             // We should loop and report error, not quit
             continue;
         }
-        arcgraph_log::store_debug!(
-            "[PartitionLogManager] log writer graph {} partition {} has flushed log, start_lsn: {}, end_lsn: {}",
-            log_buffer.graph_id,
-            log_buffer.partition_id,
-            write_start_lsn,
-            write_end_lsn
-        );
-
         // Notify user flush wait
         //
 
         log_buffer.notify_log();
-        arcgraph_log::store_debug!(
-            "[PartitionLogManager] log writer graph {} partition {} has wakeuped user, start_lsn: {}, end_lsn: {}",
-            log_buffer.graph_id,
-            log_buffer.partition_id,
-            write_start_lsn,
-            write_end_lsn
-        );
 --}//end loop
 ```

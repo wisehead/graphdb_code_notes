@@ -13,3 +13,12 @@ MetaManager::register_node
             cluster
 --};
 ```
+
+#2.caller
+
+```
+- 单机版
+	- ArcGraphServer::register_node 
+- 分布式版
+	- handle_register_node
+```

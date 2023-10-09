@@ -57,6 +57,7 @@ MetaManager::register_node
                 });
             }
 --}
+--self.create_cluster_info_msg(cluster_id)
 ```
 
 #2.caller
